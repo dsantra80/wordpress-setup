@@ -23,6 +23,10 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H 54.92.36.139 >> ~/.ssh/known_hosts
 
+      - name: Remove .git directory (Workaround for SCP)
+        run: |
+          rm -rf .git
+
       - name: Deploy WordPress using SCP
         run: |
           scp -r ./ github@54.92.36.139:/var/www/html/wordpress
