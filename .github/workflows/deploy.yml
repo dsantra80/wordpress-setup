@@ -13,19 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up SSH key
-        run: |
-          # Set up the SSH directory
-          mkdir -p ~/.ssh
-          
-          # Add the server's SSH key to known_hosts (avoids 'Host key verification failed' error)
-          ssh-keyscan -H 54.92.36.139 >> ~/.ssh/known_hosts
-
-          # Write the private key from GitHub Secrets into ~/.ssh/id_rsa
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-
-          # Set the correct permissions for the private key
-          chmod 600 ~/.ssh/id_rsa
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
       - name: Deploy WordPress
         run: |
