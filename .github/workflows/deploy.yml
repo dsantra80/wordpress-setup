@@ -13,11 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - uses: shimataro/ssh-key-action@v2
+     - name: Set up SSH
+        uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}  # The private key stored in GitHub Secrets
           name: id_rsa
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}  # The known hosts (remote server's SSH fingerprint)
 
       - name: Deploy WordPress
         run: |
