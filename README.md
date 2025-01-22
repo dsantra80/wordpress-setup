@@ -110,7 +110,7 @@ EXIT;
 
 ### Configure PHP for WordPress:
 
-Ensure the correct PHP settings are configured for WordPress in `/etc/php/7.4/fpm/php.ini`.
+Ensure the correct PHP settings are configured for WordPress in `/etc/php/8.1/fpm/php.ini`.
 
 
 
