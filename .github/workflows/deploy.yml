@@ -25,7 +25,7 @@ jobs:
 
       - name: Deploy WordPress using rsync
         run: |
-          rsync -avz --exclude '.git' --delete --no-times --no-perms ./ github@54.92.36.139:/var/www/html/wordpress
+          rsync -avz -vv --exclude '.git' --delete --no-times --no-perms ./ github@54.92.36.139:/var/www/html/wordpress
 
       - name: Reload nginx
         run: |
