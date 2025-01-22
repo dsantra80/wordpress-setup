@@ -23,9 +23,9 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H 54.92.36.139 >> ~/.ssh/known_hosts
 
-      - name: Deploy WordPress using rsync
+            - name: Deploy WordPress using rsync
         run: |
-          rsync -avz --exclude '.git' --delete --no-times ./ github@54.92.36.139:/var/www/html/wordpress
+          rsync -avz --exclude '.git' --delete --no-times --no-perms ./ github@54.92.36.139:/var/www/html/wordpress
 
       - name: Reload nginx
         run: |
