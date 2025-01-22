@@ -10,17 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up SSH
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}  # The private key stored in GitHub Secrets
-          name: id_rsa
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}  # The known hosts (remote server's SSH fingerprint)
+        run: |
+          # Create SSH directory
+          mkdir -p ~/.ssh
+          
+          # Add the SSH private key to the SSH agent
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-      - name: Deploy WordPress
+          # Add the remote server to the known_hosts to avoid "Host key verification failed"
+          echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+          # Set strict host key checking to prevent warnings
+          echo "Host *" >> ~/.ssh/config
+          echo "    StrictHostKeyChecking no" >> ~/.ssh/config
+
+      - name: Deploy WordPress using rsync
         run: |
           rsync -avz --exclude '.git' --delete ./ github@54.92.36.139:/var/www/html/wordpress
+
+      - name: Reload nginx
+        run: |
           ssh github@54.92.36.139 'sudo systemctl reload nginx'
+        # Use SSH to reload Nginx on the remote server
