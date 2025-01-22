@@ -27,6 +27,11 @@ jobs:
         run: |
           scp -r ./ github@54.92.36.139:/var/www/html/wordpress
 
+      - name: Fix file permissions on remote server
+        run: |
+          ssh github@54.92.36.139 'sudo chown -R www-data:www-data /var/www/html/wordpress'
+          ssh github@54.92.36.139 'sudo chmod -R 755 /var/www/html/wordpress'
+
       - name: Reload nginx
         run: |
           ssh github@54.92.36.139 'sudo systemctl reload nginx'
