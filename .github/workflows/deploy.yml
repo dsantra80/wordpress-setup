@@ -18,6 +18,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Add remote host to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 54.92.36.139 >> ~/.ssh/known_hosts
+
       - name: Deploy WordPress using rsync
         run: |
           rsync -avz --exclude '.git' --delete ./ github@54.92.36.139:/var/www/html/wordpress
