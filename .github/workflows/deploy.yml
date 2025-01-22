@@ -18,7 +18,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-       - name: Deploy WordPress using SFTP (excluding .git)
+      - name: Deploy WordPress using SFTP (excluding .git)
         run: |
           # Create a temporary folder and copy everything except .git
           mkdir -p temp_deploy
