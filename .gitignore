@@ -1,1 +1,12 @@
+# Ignore WordPress Core Files
+wp-content/uploads/
+wp-content/cache/
+wp-content/backups/
+
+# Ignore WordPress configuration file
+wp-config.php
+
+# Ignore log files and temporary files
+*.log
+.DS_Store
 
