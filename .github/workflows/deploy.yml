@@ -23,12 +23,16 @@ jobs:
           # Set proper permissions
           chmod 644 ~/.ssh/known_hosts
           
-          # Add the private key to the ssh-agent
+          # Write the SSH private key to a file
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          
+          # Set permissions for the private key
           chmod 600 ~/.ssh/id_rsa
           
-          # Start the SSH agent and add the private key
+          # Start the SSH agent
           eval "$(ssh-agent -s)"
+          
+          # Add the private key to the SSH agent
           ssh-add ~/.ssh/id_rsa
 
       - name: Deploy WordPress using rsync
