@@ -13,14 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-       -   name: Setup SSH Keys and known_hosts
-                env:
-                    SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-                run: |
-                    mkdir -p ~/.ssh
-                    ssh-keyscan github.com >> ~/.ssh/known_hosts
-                    ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-                    ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
 
       - name: Deploy WordPress using rsync
         run: |
@@ -29,4 +29,3 @@ jobs:
       - name: Reload nginx
         run: |
           ssh github@54.92.36.139 'sudo systemctl reload nginx'
-        # Use SSH to reload Nginx on the remote server
