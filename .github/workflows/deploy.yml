@@ -32,9 +32,9 @@ jobs:
 
       - name: Deploy WordPress using rsync
         run: |
-          rsync -avz --exclude '.git' --delete ./ github@54.92.36.139:/var/www/html/wordpress
+          rsync -avz --exclude '.git' --delete ./ ubuntu@54.92.36.139:/var/www/html/wordpress
 
       - name: Reload nginx
         run: |
-          ssh github@54.92.36.139 'sudo systemctl reload nginx'
+          ssh ubuntu@54.92.36.139 'sudo systemctl reload nginx'
         # Use SSH to reload Nginx on the remote server
