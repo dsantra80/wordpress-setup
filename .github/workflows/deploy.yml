@@ -18,21 +18,18 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Add remote host to known hosts
+       - name: Deploy WordPress using SFTP (excluding .git)
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H 54.92.36.139 >> ~/.ssh/known_hosts
+          # Create a temporary folder and copy everything except .git
+          mkdir -p temp_deploy
+          find . -name ".git" -prune -o -type f -exec cp --parents {} temp_deploy/ \;
+          
+          # Deploy using SFTP
+          sftp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no github@54.92.36.139:/var/www/html/wordpress <<< $'put -r temp_deploy/*'
 
-      - name: Remove .git directory (Workaround for SCP)
+      - name: Cleanup
         run: |
-          rm -rf .git
-
-      - name: Deploy WordPress using rsync
-        run: |
-          rsync -avz --exclude '.git' --delete ./ github@54.92.36.139:/var/www/html/wordpress
-          ssh github@54.92.36.139 'sudo chown -R www-data:www-data /var/www/html/wordpress'
-          ssh github@54.92.36.139 'sudo chmod -R 755 /var/www/html/wordpress'
-
+          rm -rf temp_deploy
 
       - name: Reload nginx
         run: |
